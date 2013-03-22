@@ -25,4 +25,11 @@ ADD_EXECUTABLE(timer_test
     )
 TARGET_LINK_LIBRARIES(timer_test green_turtle)
 
+ADD_EXECUTABLE(timer_perf_test
+    pq_timer.cpp
+    timer_perf.cpp
+    )
+TARGET_LINK_LIBRARIES(timer_perf_test green_turtle)
+
+
 ADD_SUBDIRECTORY(net)
