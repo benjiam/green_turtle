@@ -29,7 +29,7 @@ ADD_EXECUTABLE(timer_perf_test
     pq_timer.cpp
     timer_perf.cpp
     )
-TARGET_LINK_LIBRARIES(timer_perf_test green_turtle)
+TARGET_LINK_LIBRARIES(timer_perf_test green_turtle tcmalloc)
 
 
 ADD_SUBDIRECTORY(net)
