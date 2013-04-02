@@ -233,8 +233,6 @@ EventHandler* NewEventHanlder(int fd, const AddrInfo& addr)
 
 int main()
 {
-  System::UpdateTime();
-
   ::last_update_time_ = System::GetMilliSeconds();
   signal(SIGPIPE, SIG_IGN);
 

@@ -4,30 +4,27 @@
 
 using namespace green_turtle;
 
-static timeval  time_val_;
-static uint64_t time_millisecond_;
-static tm       time_tm_;
-
-void System::UpdateTime()
-{
-  gettimeofday(&time_val_,NULL);
-  time_millisecond_ = time_val_.tv_sec * 1000 + time_val_.tv_usec / 1000;
-  localtime_r(&time_val_.tv_sec,&time_tm_);
-}
-
 time_t System::GetSeconds()
 {
+  timeval  time_val_;
+  gettimeofday(&time_val_,NULL);
   return time_val_.tv_sec;
 }
 
 uint64_t System::GetMilliSeconds()
 {
+  timeval  time_val_;
+  gettimeofday(&time_val_,NULL);
+  uint64_t time_millisecond_ = time_val_.tv_sec * 1000 + time_val_.tv_usec / 1000;
   return time_millisecond_;
 }
 
-const tm& System::GetTime()
+tm System::GetTime()
 {
-  return time_tm_;
+  time_t time_now = GetSeconds();
+  tm time_tm;
+  localtime_r(&time_now, &time_tm);
+  return time_tm;
 }
 
 int System::GetSecondsDiffDays(time_t s1, time_t s2)

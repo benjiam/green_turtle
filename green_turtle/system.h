@@ -41,13 +41,11 @@ namespace green_turtle{
 //not thread safe, for inexact usage
 class System{
  public:
-  //update the static data
-  static void       UpdateTime();
   static time_t     GetSeconds();
   static uint64_t   GetMilliSeconds();
 
   //local time
-  static const tm&  GetTime();
+  tm                GetTime();
 
   //if s1 and s2 is the same day,than return 0
   //else return s2.days - s1.days
