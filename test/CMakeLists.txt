@@ -31,5 +31,10 @@ ADD_EXECUTABLE(timer_perf_test
     )
 TARGET_LINK_LIBRARIES(timer_perf_test green_turtle tcmalloc)
 
+ADD_EXECUTABLE(log_test
+    log_test.cc
+    )
+TARGET_LINK_LIBRARIES(log_test green_turtle tcmalloc)
+
 
 ADD_SUBDIRECTORY(net)

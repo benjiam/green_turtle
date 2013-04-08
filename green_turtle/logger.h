@@ -37,6 +37,8 @@
 
 #define __SHORT_FILE__  strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__
 
+namespace green_turtle{
+
 class Logger
 {
  public:
@@ -72,5 +74,7 @@ class Logger
   std::mutex  lock_;
   int fd_backup_;
 };
+
+}
 
 #endif

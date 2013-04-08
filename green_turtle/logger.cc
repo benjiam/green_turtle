@@ -7,6 +7,8 @@
 #include <string.h>
 #include <time.h>
 
+using namespace green_turtle;
+
 Logger::Logger(const char* filename, const char* link_name) :
     fd_(0),
     size_(0),
@@ -14,7 +16,7 @@ Logger::Logger(const char* filename, const char* link_name) :
     fd_backup_(0)
 {
   if(link_name) link_name_ = link_name;
-  fd_ = ::open(file_name_.c_str(), O_RDWR | O_CREAT | O_APPEND, 0644);
+  fd_ = ::open(file_name_.c_str(), O_RDWR | O_CREAT | O_APPEND | O_NONBLOCK, 0644);
   assert(fd_ && "open file error");
   off_t off = ::lseek(fd_, 0L, SEEK_END);
   size_ = off;
@@ -49,7 +51,7 @@ void Logger::ChangeLoggerFile(const char *new_file)
   std::lock_guard<std::mutex> guard(lock_);
   if(fd_backup_) close(fd_backup_);
   fd_backup_ = fd_;
-  fd_ = ::open(new_file, O_RDWR | O_CREAT | O_APPEND, 0644);
+  fd_ = ::open(new_file, O_RDWR | O_CREAT | O_APPEND | O_NONBLOCK, 0644);
   assert(fd_ && "open file error");
   file_name_ = new_file;
   off_t off = ::lseek(fd_, 0L, SEEK_END);
@@ -174,4 +176,5 @@ void Logger::LogMessage(char *str, size_t len)
   str[len] = '\n';
   int write_size = write(fd_, str, len+1);
   size_ += write_size;
+  assert(write_size == len);
 }
