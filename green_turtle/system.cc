@@ -26,6 +26,7 @@ tm System::GetTime()
   tm time_tm;
   time_t time_sec = GetSeconds();
   localtime_r(&time_sec, &time_tm);
+
   return time_tm;
 }
 

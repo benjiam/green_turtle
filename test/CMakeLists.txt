@@ -17,4 +17,16 @@ ADD_EXECUTABLE(timer_test
   )
 TARGET_LINK_LIBRARIES(timer_test green_turtle)
 
+ADD_EXECUTABLE(timer_perf_test
+    pq_timer.cpp
+    timer_perf.cpp
+    )
+TARGET_LINK_LIBRARIES(timer_perf_test green_turtle jemalloc)
+
+ADD_EXECUTABLE(log_test
+    log_test.cc
+    )
+TARGET_LINK_LIBRARIES(log_test green_turtle jemalloc)
+
+
 ADD_SUBDIRECTORY(net)

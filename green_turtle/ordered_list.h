@@ -1,4 +1,4 @@
-//Copyright 2012, egmkang wang.
+//Copyright 2013, egmkang wang.
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without
@@ -27,52 +27,66 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-// author: egmkang (egmkang@gmail.com)
+// Author: egmkang@gmail.com (egmkang wang)
+#ifndef __ORDERED_LIST_H__
+#define __ORDERED_LIST_H__
+#include <vector>
+#include <cstddef>
+#include <utils.h>
 
-#include <endian.h>
+namespace green_turtle{
 
-#ifndef __UTILS_H__
-#define __UTILS_H__
+template<typename T>
+class ordered_list
+{
+  public:
+    typedef size_t      iterator;
 
-#ifndef SAFE_DELETE
-#define SAFE_DELETE(x) if(x) { delete x; x = NULL; }
-#endif
-
-#ifndef SAFE_DELETE_ARRAY
-#define SAFE_DELETE_ARRAY(x) if(x) { delete[] x; x = NULL; }
-#endif
-
-#ifndef LIKELY
-#define LIKELY(x) __builtin_expect(!!(x), 1)
-#endif
-
-#ifndef UNLIKELY
-#define UNLIKELY(x) __builtin_expect(!!(x), 0)
-#endif
-
-template<class T>
-T HostToNet(T v);
-
-template<class T>
-T NetToHost(T v);
-
-#define CONVERT_BETWEEN_NET_HOST(T,TO_HOST,TO_NET)  \
-    template<>                                      \
-    inline T HostToNet<T>(T v)                      \
-    {                                               \
-      return TO_NET(v);                             \
-    }                                               \
-    template<>                                      \
-    inline T NetToHost(T v)                         \
-    {                                               \
-      return TO_HOST(v);                            \
+    ordered_list() : deleted_(), set_deleted_(false)
+    {
+        list_.reserve(16);
+        free_list_.reserve(16);
     }
+    iterator insert(const T& v)
+    {
+        size_t idx = 0;
+        if(!free_list_.empty())
+        {
+            idx = free_list_.back();
+            free_list_.pop_back();
+            list_[idx] = v;
+        }
+        else
+        {
+            idx = list_.size();
+            list_.push_back(v);
+        }
+        return idx;
+    }
+    void erase(iterator idx)
+    {
+        list_[idx] = deleted_;
+        free_list_.push_back(idx);
+    }
+    template<typename Fn>
+        void for_each(Fn fn)
+        {
+            for(iterator iter = 0; iter < list_.size(); ++iter)
+            {
+                if(list_[iter] == deleted_) continue;
+                if(!fn(list_[iter], iter)) break;
+            }
+        }
+    inline T get(size_t idx) const { return list_[idx] == deleted_ ? T() : list_[idx]; }
+    inline bool is_deleted(size_t idx) const {return list_[idx] == deleted_; }
+    inline void set_deleted(const T& v) { deleted_ = v; }
+  private:
+   std::vector<T>       list_;
+   std::vector<size_t>  free_list_;
+   T                    deleted_;
+   bool                 set_deleted_;
+};
 
-CONVERT_BETWEEN_NET_HOST(short, be16toh, htobe16)
-CONVERT_BETWEEN_NET_HOST(unsigned short, be16toh, htobe16)
-CONVERT_BETWEEN_NET_HOST(int, be32toh, htobe32)
-CONVERT_BETWEEN_NET_HOST(unsigned int, be32toh, htobe32)
-CONVERT_BETWEEN_NET_HOST(long long, be64toh, htobe64)
-CONVERT_BETWEEN_NET_HOST(unsigned long long, be64toh, htobe64)
+}
 
 #endif
