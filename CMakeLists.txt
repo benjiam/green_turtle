@@ -22,6 +22,7 @@ SET(CXX_FLAGS
     #-stdlib=libc++
     -fomit-frame-pointer
     -fstack-protector-all
+    -Wno-unused-parameter
     -fno-rtti
     -fno-exceptions
     -DGTEST_HAS_RTTI=0
