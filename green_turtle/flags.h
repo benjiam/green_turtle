@@ -27,61 +27,26 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-// author: egmkang (egmkang@gmail.com)
-
-#ifndef __BLOCKING_QUEUE_H__
-#define __BLOCKING_QUEUE_H__
-#include <mutex>
-#include <deque>
-#include <noncopyable.h>
+// auhor: egmkang (egmkang@gmail.com)
+//
+#ifndef __FLAGS_H__
+#define __FLAGS_H__
+#include <string>
+#include <vector>
 
 namespace green_turtle{
 
-template<class T>
-class BlockingQueue : NonCopyable
+class CommandFlags
 {
- public:
-  typedef T value_type;
- public:
-  bool Push(value_type&& v)
-  {
-    std::lock_guard<std::mutex> guard(mutex_);
-    queue_write_.push_back(v);
-    return true;
-  }
-  bool Push(const value_type& v)
-  {
-    std::lock_guard<std::mutex> guard(mutex_);
-    queue_write_.push_back(v);
-    return true;
-  }
+  public:
+    CommandFlags(int argc, const char *argv[]);
 
-  bool Pop(value_type& v)
-  {
-    if(queue_read_.empty() && !queue_write_.empty())
-    {
-      std::lock_guard<std::mutex> guard(mutex_);
-      std::swap(queue_read_, queue_write_);
-    }
-    if(!queue_read_.empty())
-    {
-      v = queue_read_.front();
-      queue_read_.pop_front();
-      return true;
-    }
-    return false;
-  }
-  uint64_t Size() const
-  {
-    //unsafe
-    return queue_read_.size() + queue_write_.size();
-  }
- private:
-  std::deque<value_type>  queue_write_;
-  std::deque<value_type>  queue_read_;
-  std::mutex              mutex_;
+    bool CheckFlag(const std::string& flag);
+    std::string GetFlags(const std::string& flag);
+  private:
+    std::vector<std::string> argv_;
 };
 
-}
+};
 
 #endif
