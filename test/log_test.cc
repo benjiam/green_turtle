@@ -21,7 +21,7 @@ int main()
         threads[i] = new std::thread([&](){
                 while(true)
                 {
-                    logger.Debug("thread %lu write log, random_num %d", std::hash<std::thread::id>()(std::this_thread::get_id()), rand());
+                    logger.Debug("thread %zu write log, random_num %d", std::hash<std::thread::id>()(std::this_thread::get_id()), rand());
                     if(++count > kMaxLogCount)
                     {
                         break;

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <assert.h>
+#include <inttypes.h>
 #include <random>
 #include <stdlib.h>
 #include "pq_timer.h"
@@ -66,7 +67,7 @@ void normal_test(uint64_t maxTime, uint64_t timerCount)
   do_tick_loop(maxTime);
 
   if (counter < timerCount) {
-    printf("Assertion failed: Not all callback invoked. %ld/%ld\n", counter, timerCount);
+    printf("Assertion failed: Not all callback invoked. %" PRIu64 "/%" PRIu64 "\n", counter, timerCount);
   }
 }
 
@@ -108,7 +109,7 @@ void timer_wheel_test(uint64_t maxTime, uint64_t timerCount)
   do_wheel_loop(maxTime);
 
   if (counter < timerCount) {
-    printf("Assertion failed: Not all callback invoked. %ld/%ld\n", counter, timerCount);
+    printf("Assertion failed: Not all callback invoked. %" PRIu64 "/%" PRIu64 "\n", counter, timerCount);
   }
 }
 

@@ -25,6 +25,7 @@ SET(CXX_FLAGS
     -Wno-unused-parameter
     -fno-rtti
     -fno-exceptions
+    -D__STDC_FORMAT_MACROS
     -DGTEST_HAS_RTTI=0
     -DGTEST_HAS_EXCEPTIONS=0
     -DGTEST_HAS_PTHREAD=1
