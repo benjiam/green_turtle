@@ -28,5 +28,10 @@ ADD_EXECUTABLE(log_test
     )
 TARGET_LINK_LIBRARIES(log_test green_turtle jemalloc)
 
+ADD_EXECUTABLE(mysql_test
+  mysql.cc
+    )
+TARGET_LINK_LIBRARIES(mysql_test green_turtle mysqlclient)
+
 
 ADD_SUBDIRECTORY(net)
